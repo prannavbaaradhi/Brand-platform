@@ -740,6 +740,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_paid_order: {
+        Args: {
+          p_billing_address: Json
+          p_discount_code?: string
+          p_email: string
+          p_full_name: string
+          p_items: Json
+          p_payment_provider: string
+          p_payment_reference: string
+          p_phone: string
+          p_shipping_address: Json
+          p_shipping_total?: number
+        }
+        Returns: string
+      }
       validate_discount: {
         Args: { p_code: string; p_subtotal: number }
         Returns: {
