@@ -1,3 +1,4 @@
+import type { Tables } from "@brand/database/types";
 import { createLookbook, toggleLookbook } from "../../../actions/merchandising";
 import { requireAdmin } from "../../../lib/auth";
 
@@ -24,7 +25,7 @@ export default async function LookbooksPage() {
         <button className="w-fit bg-[var(--charcoal)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-[var(--off-white)]">Create</button>
       </form>
       <div className="mt-6 grid gap-3">
-        {lookbooks.map((lookbook) => (
+        {lookbooks.map((lookbook: Tables<"lookbooks">) => (
           <article key={lookbook.id} className="flex items-center justify-between gap-4 border border-black/10 p-5">
             <div><p className="font-medium">{lookbook.title}</p><p className="mt-1 text-xs text-black/45">/{lookbook.slug}</p></div>
             <form action={toggleLookbook}>

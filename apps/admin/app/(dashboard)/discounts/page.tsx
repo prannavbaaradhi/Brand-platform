@@ -1,3 +1,4 @@
+import type { Tables } from "@brand/database/types";
 import { createDiscount, toggleDiscount } from "../../../actions/merchandising";
 import { requireAdmin } from "../../../lib/auth";
 
@@ -28,7 +29,7 @@ export default async function DiscountsPage() {
         <button className="w-fit bg-[var(--charcoal)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-[var(--off-white)]">Create</button>
       </form>
       <div className="mt-6 grid gap-3">
-        {discounts.map((discount) => (
+        {discounts.map((discount: Tables<"discounts">) => (
           <article key={discount.id} className="flex flex-wrap items-center justify-between gap-4 border border-black/10 p-5">
             <div>
               <p className="font-medium">{discount.code}</p>

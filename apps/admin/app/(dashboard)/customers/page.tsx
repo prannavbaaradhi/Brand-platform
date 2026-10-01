@@ -1,3 +1,4 @@
+import type { Tables } from "@brand/database/types";
 import { requireAdmin } from "../../../lib/auth";
 
 export default async function CustomersPage() {
@@ -21,7 +22,7 @@ export default async function CustomersPage() {
             <tr><th className="p-4 font-normal">Name</th><th className="p-4 font-normal">Email</th><th className="p-4 font-normal">Phone</th><th className="p-4 font-normal">Joined</th></tr>
           </thead>
           <tbody>
-            {customers.map((customer) => (
+            {customers.map((customer: Tables<"customers">) => (
               <tr key={customer.id} className="border-b border-black/[0.06] last:border-0">
                 <td className="p-4">{customer.full_name ?? "—"}</td>
                 <td className="p-4">{customer.email}</td>

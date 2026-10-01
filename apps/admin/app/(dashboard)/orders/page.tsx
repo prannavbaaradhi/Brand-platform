@@ -1,5 +1,11 @@
+import type { Tables } from "@brand/database/types";
 import { requireAdmin } from "../../../lib/auth";
 import { updateOrder } from "../../../actions/operations";
+
+type OrderRow = Pick<
+  Tables<"orders">,
+  "id" | "order_number" | "customer_email" | "total" | "currency" | "payment_status" | "stage" | "tracking_number" | "carrier" | "tracking_url" | "created_at"
+> & { order_items: Array<{ id: string }> };
 
 const stages = ["new","payment_confirmed","to_be_made","in_production","quality_check","packed","shipped","delivered","cancelled"];
 
@@ -19,7 +25,7 @@ export default async function OrdersPage() {
         <h1 className="mt-2 text-3xl font-medium tracking-[-0.04em]">Orders</h1>
       </header>
       <div className="mt-8 grid gap-4">
-        {orders.map((order) => (
+        {orders.map((order: OrderRow) => (
           <article key={order.id} className="border border-black/10 bg-white/25 p-5">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
