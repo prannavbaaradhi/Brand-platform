@@ -140,6 +140,54 @@ export type Database = {
         }
         Relationships: []
       }
+      discounts: {
+        Row: {
+          code: string
+          created_at: string
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          maximum_discount: number | null
+          minimum_order: number
+          starts_at: string | null
+          type: Database["public"]["Enums"]["discount_type"]
+          updated_at: string
+          usage_count: number
+          usage_limit: number | null
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          maximum_discount?: number | null
+          minimum_order?: number
+          starts_at?: string | null
+          type: Database["public"]["Enums"]["discount_type"]
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          maximum_discount?: number | null
+          minimum_order?: number
+          starts_at?: string | null
+          type?: Database["public"]["Enums"]["discount_type"]
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          value?: number
+        }
+        Relationships: []
+      }
       lookbook_items: {
         Row: {
           alt_text: string | null
@@ -224,6 +272,42 @@ export type Database = {
         }
         Relationships: []
       }
+      order_discounts: {
+        Row: {
+          amount: number
+          code: string
+          discount_id: string | null
+          order_id: string
+        }
+        Insert: {
+          amount: number
+          code: string
+          discount_id?: string | null
+          order_id: string
+        }
+        Update: {
+          amount?: number
+          code?: string
+          discount_id?: string | null
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_discounts_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_discounts_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           color: string | null
@@ -303,6 +387,7 @@ export type Database = {
       orders: {
         Row: {
           billing_address: Json | null
+          carrier: string | null
           created_at: string
           currency: string
           customer_email: string
@@ -323,10 +408,13 @@ export type Database = {
           stage: Database["public"]["Enums"]["order_stage"]
           subtotal: number
           total: number
+          tracking_number: string | null
+          tracking_url: string | null
           updated_at: string
         }
         Insert: {
           billing_address?: Json | null
+          carrier?: string | null
           created_at?: string
           currency?: string
           customer_email: string
@@ -347,10 +435,13 @@ export type Database = {
           stage?: Database["public"]["Enums"]["order_stage"]
           subtotal?: number
           total?: number
+          tracking_number?: string | null
+          tracking_url?: string | null
           updated_at?: string
         }
         Update: {
           billing_address?: Json | null
+          carrier?: string | null
           created_at?: string
           currency?: string
           customer_email?: string
@@ -371,6 +462,8 @@ export type Database = {
           stage?: Database["public"]["Enums"]["order_stage"]
           subtotal?: number
           total?: number
+          tracking_number?: string | null
+          tracking_url?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -475,6 +568,51 @@ export type Database = {
           },
         ]
       }
+      production_events: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          from_stage: Database["public"]["Enums"]["order_stage"] | null
+          id: string
+          note: string | null
+          order_item_id: string
+          to_stage: Database["public"]["Enums"]["order_stage"]
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          from_stage?: Database["public"]["Enums"]["order_stage"] | null
+          id?: string
+          note?: string | null
+          order_item_id: string
+          to_stage: Database["public"]["Enums"]["order_stage"]
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          from_stage?: Database["public"]["Enums"]["order_stage"] | null
+          id?: string
+          note?: string | null
+          order_item_id?: string
+          to_stage?: Database["public"]["Enums"]["order_stage"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "production_events_changed_by_fkey"
+            columns: ["changed_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "production_events_order_item_id_fkey"
+            columns: ["order_item_id"]
+            isOneToOne: false
+            referencedRelation: "order_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           available_for_order: boolean
@@ -526,15 +664,96 @@ export type Database = {
         }
         Relationships: []
       }
+      site_content: {
+        Row: {
+          created_at: string
+          is_public: boolean
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          is_public?: boolean
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          is_public?: boolean
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_content_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      webhook_events: {
+        Row: {
+          error_message: string | null
+          event_type: string | null
+          id: string
+          payload: Json
+          processed_at: string | null
+          provider: string
+          provider_event_id: string
+          received_at: string
+          status: string
+        }
+        Insert: {
+          error_message?: string | null
+          event_type?: string | null
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          provider: string
+          provider_event_id: string
+          received_at?: string
+          status?: string
+        }
+        Update: {
+          error_message?: string | null
+          event_type?: string | null
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          provider?: string
+          provider_event_id?: string
+          received_at?: string
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      validate_discount: {
+        Args: { p_code: string; p_subtotal: number }
+        Returns: {
+          discount_amount: number
+          discount_id: string
+          message: string
+          normalized_code: string
+          valid: boolean
+        }[]
+      }
     }
     Enums: {
       admin_role: "owner" | "admin" | "operations" | "content"
+      discount_type: "percentage" | "fixed"
       order_stage:
         | "new"
         | "payment_confirmed"
@@ -680,6 +899,7 @@ export const Constants = {
   public: {
     Enums: {
       admin_role: ["owner", "admin", "operations", "content"],
+      discount_type: ["percentage", "fixed"],
       order_stage: [
         "new",
         "payment_confirmed",

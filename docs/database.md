@@ -2,41 +2,42 @@
 
 The commerce database lives in Supabase/PostgreSQL.
 
-## Core tables
+## Core commerce
 
-- `products` — made-to-order products and publishing state
-- `product_variants` — size/color combinations; no stock quantity
-- `product_images` — product photography
-- `collections` and `collection_products` — storefront groupings
-- `customers` — customer contact records
-- `orders` — payment and fulfilment state
-- `order_items` — ordered pieces and per-piece production state
-- `lookbooks` and `lookbook_items` — editorial content
-- `admin_users` — authenticated dashboard users and roles
+- `products`
+- `product_variants`
+- `product_images`
+- `collections` / `collection_products`
+- `customers`
+- `orders`
+- `order_items`
+- `discounts` / `order_discounts`
+- `lookbooks` / `lookbook_items`
+- `site_content`
+- `admin_users`
+- `production_events`
+- `webhook_events`
 
-## Made-to-order flow
+There is intentionally no inventory quantity table in the first version.
+Products are made after purchase.
 
-There is intentionally no inventory table in the first version.
-
-Each purchased piece enters the production flow:
+## Production flow
 
 `to_be_made -> in_production -> quality_check -> packed -> shipped -> delivered`
 
-Order-level stages also include payment confirmation and cancellation.
+Every order-item stage change is written to `production_events`.
+
+## Assets
+
+The public `catalog` Storage bucket accepts JPEG, PNG, WebP and AVIF files up
+to 10 MB. Upload/update/delete is restricted to authenticated admins by Storage
+RLS. Public downloads are allowed because product imagery is storefront content.
 
 ## Security
 
-Row Level Security is enabled on every public table.
+RLS is enabled on every public commerce table. Catalog and published editorial
+content can be read publicly. Customer/order/admin data is restricted to admins.
+Discount codes are not enumerable publicly; validation goes through the
+`validate_discount(code, subtotal)` database function.
 
-Anonymous users can only read published catalog and lookbook data. Authenticated administrators can manage catalog and operational data. Customer/order data is not anonymously readable. The admin-check helper is stored in a non-exposed `private` schema.
-
-Supabase generated TypeScript definitions are stored in
-`packages/database/src/types.ts`.
-
-## Current remote migrations
-
-- `initial_commerce_schema`
-- `harden_rls_and_indexes`
-
-After database schema changes, regenerate the TypeScript definitions before
-shipping application code that depends on the new shape.
+Run Supabase security advisors after every DDL/RLS change.
