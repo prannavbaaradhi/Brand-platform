@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --charcoal: #1c1c1a;
+  --off-white: #f2efe9;
+  --dusty-brown: #7a6657;
+  --warm-grey: #a8a29a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--off-white);
+}
+
+body {
+  margin: 0;
+  background: var(--off-white);
+  color: var(--charcoal);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--dusty-brown);
+  color: var(--off-white);
+}
