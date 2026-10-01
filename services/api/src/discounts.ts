@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { publicDb } from "./supabase";
+import { getServerDb } from "./supabase";
 
 export async function registerDiscountRoutes(app: FastifyInstance) {
   app.post("/discounts/validate", async (request, reply) => {
@@ -12,7 +12,8 @@ export async function registerDiscountRoutes(app: FastifyInstance) {
       return reply.code(400).send({ error: "Invalid discount request" });
     }
 
-    const { data, error } = await publicDb.rpc("validate_discount", {
+    const db = getServerDb();
+    const { data, error } = await db.rpc("validate_discount", {
       p_code: code,
       p_subtotal: subtotal
     });
