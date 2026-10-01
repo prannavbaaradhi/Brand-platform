@@ -24,7 +24,7 @@ The following migrations have been applied to the remote project in order:
 20261001063651 secure_discount_validation
 20261001064045 atomic_paid_order_creation
 20261001064102 service_paid_order_rpc
-20261001064510 restrict_discount_rpc_to_server
+20261001064414 restrict_discount_rpc_to_server
 ```
 
 The remote Supabase migration history is the current schema authority for this
