@@ -1,14 +1,6 @@
 import Link from "next/link";
-import type { Tables } from "@brand/database/types";
 import { requireAdmin } from "../../../lib/auth";
 import { updateProductStatus } from "../../../actions/products";
-
-type ProductListRow = Pick<
-  Tables<"products">,
-  "id" | "name" | "slug" | "base_price" | "currency" | "status" | "production_lead_days"
-> & {
-  product_variants: Array<{ id: string }>;
-};
 
 export default async function ProductsPage() {
   const { supabase } = await requireAdmin();
@@ -39,7 +31,7 @@ export default async function ProductsPage() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product: ProductListRow) => (
+            {products.map((product) => (
               <tr key={product.id} className="border-b border-black/[0.06] last:border-0">
                 <td className="p-4"><p className="font-medium">{product.name}</p><p className="mt-1 text-xs text-black/45">/{product.slug}</p></td>
                 <td className="p-4">₹{Number(product.base_price).toLocaleString("en-IN")}</td>

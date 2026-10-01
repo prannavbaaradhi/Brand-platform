@@ -1,4 +1,3 @@
-import type { Tables } from "@brand/database/types";
 import { createCollection, toggleCollection } from "../../../actions/merchandising";
 import { requireAdmin } from "../../../lib/auth";
 
@@ -24,7 +23,7 @@ export default async function CollectionsPage() {
         <button className="w-fit bg-[var(--charcoal)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-[var(--off-white)]">Create</button>
       </form>
       <div className="mt-6 grid gap-3">
-        {collections.map((collection: Tables<"collections">) => (
+        {collections.map((collection) => (
           <article key={collection.id} className="flex items-center justify-between gap-4 border border-black/10 p-5">
             <div>
               <p className="font-medium">{collection.name}</p>

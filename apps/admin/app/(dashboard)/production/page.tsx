@@ -1,13 +1,5 @@
-import type { Tables } from "@brand/database/types";
 import { requireAdmin } from "../../../lib/auth";
 import { updateProductionStage } from "../../../actions/operations";
-
-type ProductionRow = Pick<
-  Tables<"order_items">,
-  "id" | "product_name" | "variant_label" | "size" | "color" | "quantity" | "production_stage"
-> & {
-  orders: { order_number: number; customer_email: string } | null;
-};
 
 const stages = ["to_be_made","in_production","quality_check","packed","shipped","delivered","cancelled"];
 
@@ -28,7 +20,7 @@ export default async function ProductionPage() {
         <h1 className="mt-2 text-3xl font-medium tracking-[-0.04em]">Production queue</h1>
       </header>
       <div className="mt-8 grid gap-3">
-        {items.map((item: ProductionRow) => (
+        {items.map((item) => (
           <article key={item.id} className="grid gap-4 border border-black/10 p-5 md:grid-cols-[1fr_auto] md:items-center">
             <div>
               <p className="font-medium">{item.product_name}</p>
