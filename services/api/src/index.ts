@@ -19,10 +19,20 @@ await registerDiscountRoutes(app);
 
 app.setErrorHandler((error, request, reply) => {
   request.log.error(error);
-  const status = error.statusCode && error.statusCode >= 400 ? error.statusCode : 500;
+
+  const candidate =
+    typeof error === "object" &&
+    error !== null &&
+    "statusCode" in error &&
+    typeof error.statusCode === "number"
+      ? error.statusCode
+      : 500;
+
+  const status = candidate >= 400 ? candidate : 500;
+  const message = error instanceof Error ? error.message : "Request failed";
 
   reply.code(status).send({
-    error: status >= 500 ? "Internal server error" : error.message
+    error: status >= 500 ? "Internal server error" : message
   });
 });
 

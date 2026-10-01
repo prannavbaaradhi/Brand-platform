@@ -31,7 +31,7 @@ export async function confirmPaidOrder(input: ConfirmPaidOrderInput) {
     p_items: input.items as unknown as Json,
     p_payment_provider: input.paymentProvider,
     p_payment_reference: input.paymentReference,
-    p_discount_code: input.discountCode ?? null,
+    p_discount_code: input.discountCode ?? undefined,
     p_shipping_total: input.shippingTotal ?? 0
   });
 
