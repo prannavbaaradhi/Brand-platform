@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "./types";
 
 export function createServerSupabaseClient() {
   const url = process.env.SUPABASE_URL;
@@ -8,7 +9,7 @@ export function createServerSupabaseClient() {
     throw new Error("Missing server-side Supabase environment variables.");
   }
 
-  return createClient(url, serviceRoleKey, {
+  return createClient<Database>(url, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false
