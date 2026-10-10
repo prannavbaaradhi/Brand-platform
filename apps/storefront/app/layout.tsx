@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { StorefrontIntro } from "./storefront-intro";
 
 export const metadata: Metadata = {
   title: "Brand — Storefront",
@@ -13,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><StorefrontIntro>{children}</StorefrontIntro></body>
     </html>
   );
 }

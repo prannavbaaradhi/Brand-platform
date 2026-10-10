@@ -1,0 +1,30 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--charcoal);
+  color: var(--off-white);
+  opacity: 1;
+  transition: opacity 600ms ease;
+}
+.fill, .logo {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 300ms ease, transform 450ms ease;
+}
+.shirt { width: 172px; height: auto; }
+.caption { margin-top: 28px; color: var(--accent); font-size: 11px; letter-spacing: .2em; }
+.logo { opacity: 0; transform: scale(.97); color: #eee7d9; }
+.symbol { width: 160px; height: auto; }
+.wordmark { margin-top: 20px; font-family: "Arial Black", Arial, sans-serif; font-weight: 900; font-size: 28px; letter-spacing: -1px; line-height: 1; transform: scaleX(1.12); }
+.overlay[data-phase="logo"] .fill, .overlay[data-phase="exit"] .fill { opacity: 0; }
+.overlay[data-phase="logo"] .logo, .overlay[data-phase="exit"] .logo { opacity: 1; transform: scale(1); }
+.overlay[data-phase="exit"] { opacity: 0; }
+.skip { position: absolute; bottom: max(24px, env(safe-area-inset-bottom)); right: max(24px, env(safe-area-inset-right)); min-height: 44px; padding: 10px 16px; font-size: 12px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .fill, .logo { transition: none; }
+}
